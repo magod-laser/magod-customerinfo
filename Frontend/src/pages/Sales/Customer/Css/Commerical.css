@@ -1,0 +1,114 @@
+:root {
+  --Day30: #008000;
+  --Day60: #9acd32;
+  --Month3: #90ee90;
+  --Month6: #ffa500;
+  --Year: #ff4500;
+  --Year1: #ff0000;
+  --maxDue: #a52a2a;
+  --maxDue: #a52a2a;
+  --maxDue: #a52a2a;
+  --customer: #0000ff;
+}
+.commercial-container {
+  padding: 30px;
+}
+
+.maxDue {
+  background-color: var(--maxDue) !important;
+  color: white !important;
+}
+.customerNameRow {
+  background-color: var(--customer) !important;
+  color: white !important;
+}
+
+.day30 {
+  background-color: var(--Day30) !important;
+  color: white !important;
+}
+.day60 {
+  background-color: var(--Day60) !important;
+  color: white !important;
+}
+.inv-table-data {
+  background-color: var(--Day60) !important;
+}
+.day90 {
+  background-color: var(--Month3) !important;
+  color: white !important;
+}
+.day120 {
+  background-color: var(--Month6) !important;
+  color: white !important;
+}
+.day365 {
+  background-color: var(--Year) !important;
+  color: white !important;
+}
+.years {
+  background-color: var(--Year1) !important;
+  color: white !important;
+}
+
+.m-logo {
+  height: 65px;
+  width: 65px;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.outstanding-sum-container {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  border-radius: 10px;
+}
+/* .secondary-container {
+  padding: 10px;
+} */
+.outstanding-sum-title {
+  display: flex;
+  text-align: end;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.outstanding-sum-value {
+  height: 30px;
+  width: 170px !important;
+  display: flex;
+  align-items: center;
+  width: 50%;
+  border: 2px solid;
+  /* padding: 0px 4px 0px 0px; */
+  justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 8px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.box-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.address {
+  padding: 20px;
+  /* position: relative;
+    top: -50px;
+    left: 48px; */
+}
+.address-sub {
+  font-size: 14px;
+}
+
+.Out-standing-inv{
+  font-size: 14px;
+  font-weight: 1000;
+}
