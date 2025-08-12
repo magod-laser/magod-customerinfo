@@ -18,6 +18,7 @@
     "dxf-writer": "^1.17.1",
     "express": "^4.21.1",
     "http-errors": "^2.0.0",
+    "hummus": "^1.0.117",
     "jsonwebtoken": "^8.5.1",
     "merge-pdf-buffers": "^1.0.3",
     "moment": "^2.30.1",
