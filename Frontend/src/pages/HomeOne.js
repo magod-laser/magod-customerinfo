@@ -41,7 +41,7 @@ function Home() {
           marginLeft: "42px",
         }}
         //navigate("../home")}
-        onClick={() => {window.location.href = "http://localhost:3000/Home"}}
+        onClick={() => {window.location.href = "http://www.magodlaser:3000/Home"}}
       >
         Previous Menu
       </button>

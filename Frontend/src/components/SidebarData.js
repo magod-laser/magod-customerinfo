@@ -14,6 +14,9 @@ import { VscTypeHierarchySub } from "react-icons/vsc";
 import { BiFoodMenu } from "react-icons/bi";
 import { HiUsers } from "react-icons/hi";
 
+
+const priousurl = process.env.REACT_APP_PRIVIOUSURL;
+
 export const customerSidebar = [
   {
     title: "Orders",
@@ -229,8 +232,8 @@ export const customerSidebar = [
     title: "Previous Menu",
     //path: "#", // Set path to '#' or simply omit it
     onClick: () => {
-      console.log("Navigating to port 3000/salesHome");
-        window.location.href = "http://localhost:3000/salesHome";
+      // console.log("Navigating to port 3000/salesHome");
+        window.location.href = priousurl;
       // window.location.href = "http://172.16.20.61:3000/salesHome";
       // window.location.href = "http://192.168.1.25:9000/salesHome";
     },
