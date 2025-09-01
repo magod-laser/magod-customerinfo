@@ -1,13 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Table,
-  Row,
-  Form,
-  Tabs,
-  Tab,
-  Button,
-  Modal
-} from "react-bootstrap";
+import { Table, Row, Form, Tabs, Tab, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Typeahead } from "react-bootstrap-typeahead";
@@ -19,7 +11,6 @@ const { getRequest, postRequest } = require("../../../api/apiinstance");
 const { endpoints } = require("../../../api/constants");
 
 function PartList() {
-
   const typeaheadRef = useRef(null);
   // const typeaheadProcRef = useRef(null);
   // const typeaheadMatRef = useRef(null);
@@ -296,8 +287,6 @@ function PartList() {
     console.log(custbomparts);
   };
 
-
-
   function clearAssydata() {
     document.getElementById("formmagodid").value = "";
     document.getElementById("formassyid").value = "";
@@ -345,7 +334,6 @@ function PartList() {
           // toast.error("PartId Already Exists for selected Customer");
           return;
         } else {
-
           postRequest(
             endpoints.assyInsertPartCustomer,
             {
@@ -379,7 +367,6 @@ function PartList() {
 
           setConfirmModalOpen(true);
           // toast.success("Assembly added successfully");
-
         }
       }
     );
@@ -398,7 +385,6 @@ function PartList() {
     //   setStrProcessDescription(" ");
     //  setStrMtrlCode(" ");
   };
-
 
   function clearcustBOM() {
     console.log("clear Cust BOM");
@@ -468,7 +454,6 @@ function PartList() {
   //     clearcustBOM();
   //     e.target.elements.formqty.value = 0;
   //   };
-
 
   // const addCustPart = async (e) => {
   //   e.preventDefault();
@@ -541,7 +526,14 @@ function PartList() {
     let partid = partDetailspartid;
     let qty = e.target.elements.formqty.value;
 
-    console.log("Debugging Variables - partid:", partid, ", selcustassy:", selcustassy, ", qty:", qty);
+    console.log(
+      "Debugging Variables - partid:",
+      partid,
+      ", selcustassy:",
+      selcustassy,
+      ", qty:",
+      qty
+    );
 
     if (!partid || partid.trim() === "") {
       toast.error("Invalid Part ID, skipping.");
@@ -552,7 +544,9 @@ function PartList() {
       return;
     }
 
-    let partdesc = custbomparts.find((part) => part["PartId"] === partid)?.["PartDescription"];
+    let partdesc = custbomparts.find((part) => part["PartId"] === partid)?.[
+      "PartDescription"
+    ];
     if (!partdesc) {
       toast.error("Invalid Part ID, no description found.");
       return;
@@ -574,7 +568,8 @@ function PartList() {
           qty: qty,
         },
       ];
-      console.log("Updated CustPartDetails: ", newData);
+      // console.log("Updated CustPartDetails: ", newData);
+      alert("Please Save the data before closing");
       return newData;
     });
 
@@ -583,14 +578,19 @@ function PartList() {
     toast.success("Part added successfully");
   };
 
-
   //Sorting BOM Item List
-  const [sortConfigbomitemlist, setsortConfigbomitemlist] = useState({ key: null, direction: null });
+  const [sortConfigbomitemlist, setsortConfigbomitemlist] = useState({
+    key: null,
+    direction: null,
+  });
 
   // sorting function for table headings of the table
   const requestSortBomItemList = (key) => {
     let direction = "asc";
-    if (sortConfigbomitemlist.key === key && sortConfigbomitemlist.direction === "asc") {
+    if (
+      sortConfigbomitemlist.key === key &&
+      sortConfigbomitemlist.direction === "asc"
+    ) {
       direction = "desc";
     }
     setsortConfigbomitemlist({ key, direction });
@@ -639,19 +639,24 @@ function PartList() {
   };
 
   // Sorting Assembly List
-  const [sortConfigAssypart, setsortConfigAssmpart] = useState({ key: null, direction: null });
+  const [sortConfigAssypart, setsortConfigAssmpart] = useState({
+    key: null,
+    direction: null,
+  });
 
   // sorting function for table headings of the table
   const requestSortAssypart = (key) => {
     let direction = "asc";
-    if (sortConfigAssypart.key === key && sortConfigAssypart.direction === "asc") {
+    if (
+      sortConfigAssypart.key === key &&
+      sortConfigAssypart.direction === "asc"
+    ) {
       direction = "desc";
     }
     setsortConfigAssmpart({ key, direction });
   };
 
   const sortedDataAssyPart = () => {
-
     const dataCopyAssypart = [...custassydetails];
 
     if (sortConfigAssypart.key) {
@@ -705,14 +710,19 @@ function PartList() {
     );
   };
 
-
   // Sorting Assembly List
-  const [sortConfigCustpart, setsortConfigCustpart] = useState({ key: null, direction: null });
+  const [sortConfigCustpart, setsortConfigCustpart] = useState({
+    key: null,
+    direction: null,
+  });
 
   // sorting function for table headings of the table
   const requestSortCustpart = (key) => {
     let direction = "asc";
-    if (sortConfigCustpart.key === key && sortConfigCustpart.direction === "asc") {
+    if (
+      sortConfigCustpart.key === key &&
+      sortConfigCustpart.direction === "asc"
+    ) {
       direction = "desc";
     }
     setsortConfigCustpart({ key, direction });
@@ -727,9 +737,7 @@ function PartList() {
         let valueB = b[sortConfigCustpart.key];
 
         // Convert only for the "integer" columns
-        if (
-          sortConfigCustpart.key === "qty"
-        ) {
+        if (sortConfigCustpart.key === "qty") {
           valueA = parseFloat(valueA);
           valueB = parseFloat(valueB);
         }
@@ -748,13 +756,21 @@ function PartList() {
 
   // RENDER BOM TABLEDATA
   let rendercustpartdetail = (custpart, id) => {
-
     let custpartid = custpart["partid"];
 
     // write if condetion to remove the default assypartidissue
     if (custpartid === null) {
     } else {
-      console.log("Id:" + id + " Cust:" + custcode + " custpartid: " + custpartid + " assyPartId: " + custpart.assyPartId);
+      console.log(
+        "Id:" +
+          id +
+          " Cust:" +
+          custcode +
+          " custpartid: " +
+          custpartid +
+          " assyPartId: " +
+          custpart.assyPartId
+      );
 
       // btnasmprtdel
       // setBtnAsmPrtDel(true);
@@ -792,8 +808,12 @@ function PartList() {
     document.getElementById("formmagodid").value = part["MagodCode"];
     document.getElementById("formassyid").value = part["AssyCust_PartId"];
     document.getElementById("formdescription").value = part["AssyDescription"];
-    document.getElementById("formmtrlcost").value = parseFloat(part["MtrlCost"]).toFixed(2);
-    document.getElementById("formjwcost").value = parseFloat(part["JobWorkCost"]).toFixed(2);
+    document.getElementById("formmtrlcost").value = parseFloat(
+      part["MtrlCost"]
+    ).toFixed(2);
+    document.getElementById("formjwcost").value = parseFloat(
+      part["JobWorkCost"]
+    ).toFixed(2);
     // document.getElementById("formoperation").value = part["Operation"];
     document.getElementById("formstatus").value = "Edit";
     console.log("id: ", id);
@@ -827,7 +847,6 @@ function PartList() {
       },
       (resp) => {
         setCustPartDetails(resp);
-
       }
     );
   };
@@ -852,7 +871,16 @@ function PartList() {
     console.log("mtrlcost: ", mtrlcost);
     postRequest(
       endpoints.UpdateBOMAssembly,
-      { mmagodid, massyid, assmstatus, assmdesc, mtrlcost, jobworkcost, Operation, mtrl },
+      {
+        mmagodid,
+        massyid,
+        assmstatus,
+        assmdesc,
+        mtrlcost,
+        jobworkcost,
+        Operation,
+        mtrl,
+      },
       (resp) => {
         console.log(resp);
         if (resp.status === "success") {
@@ -860,14 +888,14 @@ function PartList() {
           toast.success("Updated Assembly Details Successfully");
           //   isFirstClickRef.current = false;
           // }
-          setCustAssyDetails(resp.data)
+          setCustAssyDetails(resp.data);
         }
       }
     );
   };
 
   let saveBomAssemblyParts = async () => {
-    console.log("Saving BOM Assembly Parts", custpartdetails)
+    console.log("Saving BOM Assembly Parts", custpartdetails);
     //   setBtnAddNew(false);
     //  setBtnUpdate(true);
 
@@ -890,7 +918,16 @@ function PartList() {
     console.log("mtrlcost: ", mtrlcost);
     postRequest(
       endpoints.UpdateBOMAssembly,
-      { mmagodid, massyid, assmstatus, assmdesc, mtrlcost, jobworkcost, Operation, mtrl },
+      {
+        mmagodid,
+        massyid,
+        assmstatus,
+        assmdesc,
+        mtrlcost,
+        jobworkcost,
+        Operation,
+        mtrl,
+      },
       (resp) => {
         console.log(resp);
         if (resp.status === "success") {
@@ -898,10 +935,10 @@ function PartList() {
           //   toast.success("Updated Assembly Details Successfully");
           //   isFirstClickRef.current = false;
           // }
-          setCustAssyDetails(resp.data)
+          setCustAssyDetails(resp.data);
         }
-      });
-
+      }
+    );
 
     postRequest(
       endpoints.bomAssemblyParts,
@@ -918,8 +955,8 @@ function PartList() {
   };
 
   let selectItem = (item, id) => {
-    console.log("item: ", item)
-    console.log("id: " + id)
+    console.log("item: ", item);
+    console.log("id: " + id);
     setSelectedbompart(item);
     // console.log(item);
     // setBtnAsmPrtDel(false);
@@ -973,7 +1010,8 @@ function PartList() {
     console.log(newdata);
     setCustPartDetails(newdata);
     postRequest(
-      endpoints.DeleteBOMAssemblyPart, { selectedbompart, custcode },
+      endpoints.DeleteBOMAssemblyPart,
+      { selectedbompart, custcode },
       //  { olddata, newdata },
       (deldata) => {
         if (deldata.status == "success") {
@@ -991,354 +1029,403 @@ function PartList() {
   //   setQty(mvalue);
   // };
 
-  let handleChangeQtyNumeric = (evt) => {
+  // let handleChangeQtyNumeric = (evt) => {
+  //   if (/^[1-9]\d*$/.test(originalValue)) {
+  //     setQty(originalValue);
+  //   } else {
+  //     setQty("");
+  //     // alert('Please enter a valid positive integer.');
+  //   }
 
-    if (/^[1-9]\d*$/.test(originalValue)) {
-      setQty(originalValue);
-    } else {
-      setQty('');
-      alert('Please enter a valid positive integer.');
-    }
-    // const originalValue = evt.target.value;
-    // if (originalValue === '') {
-    //    setQty('');
-    //    return;
-    // }
+  //   // const originalValue = evt.target.value;
+  //   // if (originalValue === '') {
+  //   //    setQty('');
+  //   //    return;
+  //   // }
 
-    // if (originalValue.length > 1) {
-    // // Remove any non-digit characters
-    // const numericValue = originalValue.replace(/^0+/, '');
-    // }
+  //   // if (originalValue.length > 1) {
+  //   // // Remove any non-digit characters
+  //   // const numericValue = originalValue.replace(/^0+/, '');
+  //   // }
 
-    // if (/^\d+$/.test(originalValue)) {
-    //   setQty(originalValue);
-    // }
+  //   // if (/^\d+$/.test(originalValue)) {
+  //   //   setQty(originalValue);
+  //   // }
 
-    // // Ensure the value is a positive whole number
-    // // if (numericValue && parseInt(numericValue) > 0) {
-    // //   setQty(numericValue);
-    // // }
-    //  else {
-    //   setQty("");
-    //   alert("Please enter a value greater than 0.");
-    // }
+  //   // // Ensure the value is a positive whole number
+  //   // // if (numericValue && parseInt(numericValue) > 0) {
+  //   // //   setQty(numericValue);
+  //   // // }
+  //   //  else {
+  //   //   setQty("");
+  //   //   alert("Please enter a value greater than 0.");
+  //   // }
 
+  //   const originalValue = evt.target.value;
+
+  //   // Allow clearing the input
+  //   if (originalValue === "") {
+  //     setQty("");
+  //     return;
+  //   }
+
+  //   // Validate input to only allow positive integers
+  //   if (originalValue.replace(/(\d{3})\d+/, "$1")) {
+  //     setQty(originalValue);
+  //   } else {
+  //     setQty("");
+  //     alert("Please enter a valid integer.");
+  //   }
+  // };
+
+  const handleChangeQtyNumeric = (evt) => {
     const originalValue = evt.target.value;
 
     // Allow clearing the input
-    if (originalValue === '') {
-      setQty('');
+    if (originalValue === "") {
+      setQty("");
       return;
     }
 
-      // Validate input to only allow positive integers
-      if ((originalValue.replace(/(\d{3})\d+/, "$1") )) {
-        setQty(originalValue);
-      } else {
-        setQty('');
-        alert('Please enter a valid integer.');
-      }
-    };
+    // Only allow positive integers (no zero)
+    if (/^[1-9]\d*$/.test(originalValue)) {
+      setQty(originalValue);
+    } else {
+      alert("Please enter a value greater than 0.");
+      return;
+    }
+  };
 
-    const blockInvalidQtyChar = (e) =>
-      ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault();
+  const blockInvalidQtyChar = (e) => {
+    const invalidChars = ["e", "E", "+", "-", "."];
+    if (invalidChars.includes(e.key)) {
+      e.preventDefault();
+    }
+  };
 
-    const handleChangeMtrlCost = (e) => {
-      //  const mvalue = e.target.value.replace(/[^0-9]/gi, "");
-      const { value } = e.target;
-      if (/^\d*$/.test(value)) { // Only allow numeric values setValue(value); }
-        setMtrlcost(value);
-      }
-    };
+  // const blockInvalidQtyChar = (e) =>
+  //   ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault();
 
-    const handleKeyPress = (e) => {
-      if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
-        e.preventDefault();
-      }
-    };
+  const handleChangeMtrlCost = (e) => {
+    //  const mvalue = e.target.value.replace(/[^0-9]/gi, "");
+    const { value } = e.target;
+    if (/^\d*$/.test(value)) {
+      // Only allow numeric values setValue(value); }
+      setMtrlcost(value);
+    }
+  };
 
-    // let handleChangeLbrCost = (e) => {
-    //   const Inputvalue = e.target.value.replace(/[^0-9]/gi, "");
-    //   // if (/^\d*\.?\d{0,2}$/.test(Inputvalue)){
-    //   //   setLbrcost(Inputvalue);
-    //   //   }
-    //    console.log("mvalve", Inputvalue);
-    //    setLbrcost(Inputvalue);
-    // };
+  const handleKeyPress = (e) => {
+    if (e.key === "e" || e.key === "E" || e.key === "+" || e.key === "-") {
+      e.preventDefault();
+    }
+  };
 
-    let handleChangeLbrCost = (e) => {
-      // Use a regular expression to allow only numbers with up to two decimal places
-      const inputValue = e.target.value;
+  // let handleChangeLbrCost = (e) => {
+  //   const Inputvalue = e.target.value.replace(/[^0-9]/gi, "");
+  //   // if (/^\d*\.?\d{0,2}$/.test(Inputvalue)){
+  //   //   setLbrcost(Inputvalue);
+  //   //   }
+  //    console.log("mvalve", Inputvalue);
+  //    setLbrcost(Inputvalue);
+  // };
 
-      // Validate the input value using regex
-      if (/^\d*\.?\d{0,2}$/.test(inputValue)) {
-        setLbrcost(inputValue); // Update the state only if the value is valid
-      } else {
-        console.log("Invalid input:", inputValue); // Log invalid input for debugging
-      }
+  let handleChangeLbrCost = (e) => {
+    // Use a regular expression to allow only numbers with up to two decimal places
+    const inputValue = e.target.value;
 
-      console.log("Validated value:", inputValue);
-    };
-
-
-    let handleChangeOpearion = (evt) => {
-      const mvalue = evt.target.value;
-      console.log("mvalve", mvalue);
-      setOpearion(mvalue);
-    };
-    let handleChangeMaterial = (evt) => {
-      const mvalue = evt.target.value;
-      console.log("mvalve", mvalue);
-      setMaterial(mvalue);
-    };
-    const handleMtrlCodeTypeaheadChangeeee = (selectedOptions) => {
-      console.log("selectedOptions....", selectedOptions);
-      setSelectedItems(selectedOptions);
-      // if (selectedOptions.length > 0) {
-      //   setLastSlctedRow(selectedOptions[0]);
-      // }
-      setMaterial(selectedOptions[0]?.Mtrl_Code);
-
-      console.log("selectedOptions[0]?.Mtrl_Code", selectedOptions[0]?.Mtrl_Code);
-      const selectedValue =
-        selectedOptions.length > 0 ? selectedOptions[0]?.Mtrl_Code : " ";
-      console.log("selectedValue", selectedValue);
-      setStrMtrlCode(selectedValue);
-    };
-
-    const handleProcessTypeaheadChangeeee = (selectedItms) => {
-      console.log("selectedOptions....", selectedItms);
-      setSelectedItms(selectedItms);
-
-      //  console.log("selectedOptions[0]?.ProcessDescription", selectedItms[0]?.ProcessDescription);
-
-      // const selectedValue = selectedItms.length > 0 ? selectedItms[0]?.ProcessDescription : " ";
-      const selectedValue = selectedItms.length > 0 ? selectedItms[0]?.Operation : " ";
-      console.log("selectedValue", selectedValue);
-      setStrProcessDescription(selectedValue);
-    };
-
-
-    const handlePartIdTypeaheadChange = (selectedOptions) => {
-
-      //   const handlePartIdTypeaheadChange = (selectedOptions) => {
-      console.log("Typehaed: ", selectedOptions[0]);
-      console.log("Typehaed: ", selectedOptions[0]?.PartId);
-      console.log("Main Magod Code: ", selectedCustAssy["MagodCode"]);
-
-      if (selectedCustAssy["MagodCode"] === "" || selectedCustAssy["MagodCode"] === undefined) {
-        toast.warning("Please select Assembly details before selecting Part Details");
-        return;
-      }
-
-      setSelectedPart1(selectedOptions); // Update the state
-      setpartDetailsPartId(selectedOptions[0]?.PartId);
-      setFormCustPartId(selectedOptions[0]?.PartId);
-
+    // Validate the input value using regex
+    if (/^\d*\.?\d{0,2}$/.test(inputValue)) {
+      setLbrcost(inputValue); // Update the state only if the value is valid
+    } else {
+      console.log("Invalid input:", inputValue); // Log invalid input for debugging
     }
 
+    console.log("Validated value:", inputValue);
+  };
 
-    let handleKeyDown = (evt) => {
+  let handleChangeOpearion = (evt) => {
+    const mvalue = evt.target.value;
+    console.log("mvalve", mvalue);
+    setOpearion(mvalue);
+  };
+  let handleChangeMaterial = (evt) => {
+    const mvalue = evt.target.value;
+    console.log("mvalve", mvalue);
+    setMaterial(mvalue);
+  };
+  const handleMtrlCodeTypeaheadChangeeee = (selectedOptions) => {
+    console.log("selectedOptions....", selectedOptions);
+    setSelectedItems(selectedOptions);
+    // if (selectedOptions.length > 0) {
+    //   setLastSlctedRow(selectedOptions[0]);
+    // }
+    setMaterial(selectedOptions[0]?.Mtrl_Code);
 
-      // Prevent entering the letter "e" (101 or 69 in key codes)
-      if (evt.key === "e" || evt.keyCode === 101 || evt.keyCode === 69) {
-        evt.preventDefault();
-      }
-      // Allow decimals for two digits only
-      const value = evt.target.value;
-      const decimalIndex = value.indexOf(".");
-      if (decimalIndex !== -1 && value.substring(decimalIndex + 1).length >= 2) {
-        evt.preventDefault();
-      }
-    };
+    console.log("selectedOptions[0]?.Mtrl_Code", selectedOptions[0]?.Mtrl_Code);
+    const selectedValue =
+      selectedOptions.length > 0 ? selectedOptions[0]?.Mtrl_Code : " ";
+    console.log("selectedValue", selectedValue);
+    setStrMtrlCode(selectedValue);
+  };
 
-    const yesClicked = () => {
-      //  handleClose(true);
-      toast.success("Assy Info Saved");
-      // typeaheadProcRef.current.clear();
-      // typeaheadMatRef.current.clear();
-      closeModal();
+  const handleProcessTypeaheadChangeeee = (selectedItms) => {
+    console.log("selectedOptions....", selectedItms);
+    setSelectedItms(selectedItms);
 
+    //  console.log("selectedOptions[0]?.ProcessDescription", selectedItms[0]?.ProcessDescription);
 
+    // const selectedValue = selectedItms.length > 0 ? selectedItms[0]?.ProcessDescription : " ";
+    const selectedValue =
+      selectedItms.length > 0 ? selectedItms[0]?.Operation : " ";
+    console.log("selectedValue", selectedValue);
+    setStrProcessDescription(selectedValue);
+  };
+
+  const handlePartIdTypeaheadChange = (selectedOptions) => {
+    //   const handlePartIdTypeaheadChange = (selectedOptions) => {
+    console.log("Typehaed: ", selectedOptions[0]);
+    console.log("Typehaed: ", selectedOptions[0]?.PartId);
+    console.log("Main Magod Code: ", selectedCustAssy["MagodCode"]);
+
+    if (
+      selectedCustAssy["MagodCode"] === "" ||
+      selectedCustAssy["MagodCode"] === undefined
+    ) {
+      toast.warning(
+        "Please select Assembly details before selecting Part Details"
+      );
       return;
     }
 
-    const closeModal = () => {
-      // typeaheadProcRef.current.clear();
-      // typeaheadMatRef.current.clear();
-      setConfirmModalOpen(false);
-    };
+    setSelectedPart1(selectedOptions); // Update the state
+    setpartDetailsPartId(selectedOptions[0]?.PartId);
+    setFormCustPartId(selectedOptions[0]?.PartId);
+  };
 
+  let handleKeyDown = (evt) => {
+    // Prevent entering the letter "e" (101 or 69 in key codes)
+    if (evt.key === "e" || evt.keyCode === 101 || evt.keyCode === 69) {
+      evt.preventDefault();
+    }
+    // Allow decimals for two digits only
+    const value = evt.target.value;
+    const decimalIndex = value.indexOf(".");
+    if (decimalIndex !== -1 && value.substring(decimalIndex + 1).length >= 2) {
+      evt.preventDefault();
+    }
+  };
 
-    return (
-      // <Container>
-      //     <div className="addquotecard">
-      //         {/* <Row className="justify-content-md-center"> */}
-      //         <h4 className="addquotecard-header">Customer BOM</h4>
-      <div>
-        {/* <BreadcrumbsComponent /> */}
-        <h4 className="title">Customer BOM</h4>
+  const yesClicked = () => {
+    //  handleClose(true);
+    toast.success("Assy Info Saved");
+    // typeaheadProcRef.current.clear();
+    // typeaheadMatRef.current.clear();
+    closeModal();
 
-        <div className="form-style"></div>
-        <div className="row">
-          <div className="col-md-6 d-flex" style={{ gap: "10px" }}>
-            <label className="form-label">
-              Customer
-              <span
-                style={{
-                  color: "#f20707",
-                  fontSize: "16px",
-                  fontWeight: "bold",
-                }}
-              >
-                *
-              </span>
-            </label>
+    return;
+  };
 
+  const closeModal = () => {
+    // typeaheadProcRef.current.clear();
+    // typeaheadMatRef.current.clear();
+    setConfirmModalOpen(false);
+  };
 
-            <Typeahead
-              className="ip-select mt-1"
-              // id="formCustName"
-              id="formCustName"
-              // onChange={selectCust}
-              options={custarray}
-              placeholder="Select Customer"
-              onChange={(label) => handleCustChange(label)}
-            />
-          </div>
-          <div className="col-md-3 d-flex" style={{ gap: "10px" }}>
-            <label className="form-label mt-1">Code </label>
-            <input
-              className="in-field mt-1"
-              id="formCustCode"
-              disabled
-              value={custcode}
-            />
-          </div>
-          <div className="col-md-3">
-            <div>
-              <button
-                className="button-style"
-                id="btnclose"
-                type="submit"
-                onClick={() => navigate("/customer")}
-              >
-                Close{" "}
-              </button>
-            </div>
+  return (
+    // <Container>
+    //     <div className="addquotecard">
+    //         {/* <Row className="justify-content-md-center"> */}
+    //         <h4 className="addquotecard-header">Customer BOM</h4>
+    <div>
+      {/* <BreadcrumbsComponent /> */}
+      <h4 className="title">Customer BOM</h4>
+
+      <div className="form-style"></div>
+      <div className="row">
+        <div className="col-md-6 d-flex" style={{ gap: "10px" }}>
+          <label className="form-label">
+            Customer
+            <span
+              style={{
+                color: "#f20707",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              *
+            </span>
+          </label>
+
+          <Typeahead
+            className="ip-select mt-1"
+            // id="formCustName"
+            id="formCustName"
+            // onChange={selectCust}
+            options={custarray}
+            placeholder="Select Customer"
+            onChange={(label) => handleCustChange(label)}
+          />
+        </div>
+        <div className="col-md-3 d-flex" style={{ gap: "10px" }}>
+          <label className="form-label mt-1">Code </label>
+          <input
+            className="in-field mt-1"
+            id="formCustCode"
+            disabled
+            value={custcode}
+          />
+        </div>
+        <div className="col-md-3">
+          <div>
+            <button
+              className="button-style"
+              id="btnclose"
+              type="submit"
+              onClick={() => navigate("/customer")}
+            >
+              Close{" "}
+            </button>
           </div>
         </div>
-        <Row>
-          <Tabs defaultActiveKey="bomitemslist" className="mb-1  tab_font">
-            <Tab eventKey="bomitemslist" title="Customer BOM Items List">
-              <div className="row">
-                <div
-                  className="col-md-8"
-                  style={{ overflowY: "scroll", height: "200px" }}
-                >
-                  <Table striped className="table-data border">
-                    <thead className="tableHeaderBGColor tablebody">
-                      <tr>
-                        <th onClick={() => requestSortBomItemList("MagodPartId")}>Magod Part ID</th>
-                        <th onClick={() => requestSortBomItemList("PartId")}>Part ID</th>
-                        <th onClick={() => requestSortBomItemList("PartDescription")}>Part Description</th>
-                      </tr>
-                    </thead>
-                    <tbody className="tablebody">
-                      {/* {custbomparts != null
-                      ? custbomparts.map((part) => renderBomItemList(part))
-                      : null} */}
-                      {sortedDatabomItemList().map((part) => renderBomItemList(part))}
-                    </tbody>
-                  </Table>
-                </div>
-                <div className="col-md-4" style={{ backgroundColor: "#e6e6e6" }}>
-                  <Form onSubmit={addBOMPart} autoComplete="off">
-                    <h6 className="mb-3" style={{ textAlign: "center" }}>
-                      <u>Part as identified in Customer Drawing</u>
-                    </h6>
-                    <div className="d-flex" style={{ gap: "60px" }}>
-                      <label
-                        className="form-label"
-                        style={{ whiteSpace: "nowrap" }}
-                      >
+      </div>
+      <Row>
+        <Tabs defaultActiveKey="bomitemslist" className="mb-1  tab_font">
+          <Tab eventKey="bomitemslist" title="Customer BOM Items List">
+            <div className="row">
+              <div
+                className="col-md-8"
+                style={{ overflowY: "scroll", height: "200px" }}
+              >
+                <Table striped className="table-data border">
+                  <thead className="tableHeaderBGColor tablebody">
+                    <tr>
+                      <th onClick={() => requestSortBomItemList("MagodPartId")}>
+                        Magod Part ID
+                      </th>
+                      <th onClick={() => requestSortBomItemList("PartId")}>
                         Part ID
-                        <span
-                          style={{
-                            color: "#f20707",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          *
-                        </span>
-                      </label>
-
-                      <input
-                        id="formpartid"
-                        className="in-fields"
-                        type="text"
-                        placeholder="Enter Part ID"
-                        required
-                      />
-                    </div>
-
-                    <div className="d-flex" style={{ gap: "10px" }}>
-                      <label
-                        className="form-label"
-                        style={{ whiteSpace: "nowrap" }}
+                      </th>
+                      <th
+                        onClick={() =>
+                          requestSortBomItemList("PartDescription")
+                        }
                       >
                         Part Description
-                        <span
-                          style={{
-                            color: "#f20707",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          *
-                        </span>
-                      </label>
-
-                      <input
-                        id="formpartdesc"
-                        className="in-fields"
-                        type="text"
-                        placeholder="Enter Part Description"
-                        required
-                      />
-                    </div>
-                    <div style={{ textAlign: "center" }}>
-                      <button
-                        variant="primary"
-                        type="submit"
-                        className="button-style justify-content-center"
-                      >
-                        Add Part
-                      </button>
-                    </div>
-                  </Form>
-                </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="tablebody">
+                    {/* {custbomparts != null
+                      ? custbomparts.map((part) => renderBomItemList(part))
+                      : null} */}
+                    {sortedDatabomItemList().map((part) =>
+                      renderBomItemList(part)
+                    )}
+                  </tbody>
+                </Table>
               </div>
-            </Tab>
+              <div className="col-md-4" style={{ backgroundColor: "#e6e6e6" }}>
+                <Form onSubmit={addBOMPart} autoComplete="off">
+                  <h6 className="mb-3" style={{ textAlign: "center" }}>
+                    <u>Part as identified in Customer Drawing</u>
+                  </h6>
+                  <div className="d-flex" style={{ gap: "60px" }}>
+                    <label
+                      className="form-label"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      Part ID
+                      <span
+                        style={{
+                          color: "#f20707",
+                          fontSize: "16px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        *
+                      </span>
+                    </label>
 
-            <Tab eventKey="custpartassmlist" title="Customer Assembly List">
-              <div className="row">
-                <div
-                  className="col-md-8"
-                  style={{ maxHeight: "275px", overflowY: "scroll" }}
-                >
-                  <Table striped className="table-data border">
-                    <thead className="tableHeaderBGColor tablebody">
-                      <tr>
-                        <th onClick={() => requestSortAssypart("MagodCode")}>Magod Code</th>
-                        <th onClick={() => requestSortAssypart("AssyCust_PartId")}>Assm Cust PartID</th>
-                        <th onClick={() => requestSortAssypart("AssyDescription")}>Assm Description</th>
-                        <th onClick={() => requestSortAssypart("MtrlCost")}>Mtrl Cost</th>
-                        <th onClick={() => requestSortAssypart("JobWorkCost")}>JW Cost</th>
-                        {/* <th onClick={() => requestSortAssypart("Operation")}>Operation</th>
+                    <input
+                      id="formpartid"
+                      className="in-fields"
+                      type="text"
+                      placeholder="Enter Part ID"
+                      required
+                    />
+                  </div>
+
+                  <div className="d-flex" style={{ gap: "10px" }}>
+                    <label
+                      className="form-label"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      Part Description
+                      <span
+                        style={{
+                          color: "#f20707",
+                          fontSize: "16px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        *
+                      </span>
+                    </label>
+
+                    <input
+                      id="formpartdesc"
+                      className="in-fields"
+                      type="text"
+                      placeholder="Enter Part Description"
+                      required
+                    />
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <button
+                      variant="primary"
+                      type="submit"
+                      className="button-style justify-content-center"
+                    >
+                      Add Part
+                    </button>
+                  </div>
+                </Form>
+              </div>
+            </div>
+          </Tab>
+
+          <Tab eventKey="custpartassmlist" title="Customer Assembly List">
+            <div className="row">
+              <div
+                className="col-md-8"
+                style={{ maxHeight: "275px", overflowY: "scroll" }}
+              >
+                <Table striped className="table-data border">
+                  <thead className="tableHeaderBGColor tablebody">
+                    <tr>
+                      <th onClick={() => requestSortAssypart("MagodCode")}>
+                        Magod Code
+                      </th>
+                      <th
+                        onClick={() => requestSortAssypart("AssyCust_PartId")}
+                      >
+                        Assm Cust PartID
+                      </th>
+                      <th
+                        onClick={() => requestSortAssypart("AssyDescription")}
+                      >
+                        Assm Description
+                      </th>
+                      <th onClick={() => requestSortAssypart("MtrlCost")}>
+                        Mtrl Cost
+                      </th>
+                      <th onClick={() => requestSortAssypart("JobWorkCost")}>
+                        JW Cost
+                      </th>
+                      {/* <th onClick={() => requestSortAssypart("Operation")}>Operation</th>
                       <th onClick={() => requestSortAssypart("Mtrl_Code")}>Material</th> */}
-                        {/* {[
+                      {/* {[
                         "Magod Code",
                         "Assm Cust PartID",
                         "Assm Description",
@@ -1347,93 +1434,95 @@ function PartList() {
                       ].map((item) => {
                         return <th>{item}</th>;
                       })} */}
-                      </tr>
-                    </thead>
-                    <tbody className="tablebody">
-                      {/* {custassydetails != null
+                    </tr>
+                  </thead>
+                  <tbody className="tablebody">
+                    {/* {custassydetails != null
                       ? custassydetails.map((part, id) =>
                         renderassemblydetails(part, id)
                       )
                       : null} */}
-                      {sortedDataAssyPart().map((part, id) => renderassemblydetails(part, id))}
-                    </tbody>
-                  </Table>
-                </div>
-                <div className="col-md-4" style={{ backgroundColor: "#e6e6e6" }}>
-                  <Form onSubmit={addAssemblyDetails} autoComplete="off">
-                    <h6 className="" style={{ textAlign: "center" }}>
-                      <u>Part / Assembly Details</u>
-                    </h6>
-                    <div className="d-flex" style={{ gap: "30px" }}>
-                      <label
-                        className="form-label"
-                        style={{ whiteSpace: "nowrap" }}
+                    {sortedDataAssyPart().map((part, id) =>
+                      renderassemblydetails(part, id)
+                    )}
+                  </tbody>
+                </Table>
+              </div>
+              <div className="col-md-4" style={{ backgroundColor: "#e6e6e6" }}>
+                <Form onSubmit={addAssemblyDetails} autoComplete="off">
+                  <h6 className="" style={{ textAlign: "center" }}>
+                    <u>Part / Assembly Details</u>
+                  </h6>
+                  <div className="d-flex" style={{ gap: "30px" }}>
+                    <label
+                      className="form-label"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      Magod ID
+                    </label>
+                    <input
+                      id="formmagodid"
+                      className="in-fields"
+                      type="text"
+                      placeholder="Enter Magod ID"
+                      disabled
+                      style={{ marginTop: "-5px" }}
+                    />
+                  </div>
+
+                  <div className="d-flex" style={{ gap: "10px" }}>
+                    <label
+                      className="form-label"
+                      style={{ whiteSpace: "nowrap", marginTop: "-5px" }}
+                    >
+                      Assembly ID
+                      <span
+                        style={{
+                          color: "#f20707",
+                          fontSize: "16px",
+                          fontWeight: "bold",
+                        }}
                       >
-                        Magod ID
-                      </label>
-                      <input
-                        id="formmagodid"
-                        className="in-fields"
-                        type="text"
-                        placeholder="Enter Magod ID"
-                        disabled
-                        style={{ marginTop: "-5px" }}
-                      />
-                    </div>
+                        *
+                      </span>
+                    </label>
 
-                    <div className="d-flex" style={{ gap: "10px" }}>
-                      <label
-                        className="form-label"
-                        style={{ whiteSpace: "nowrap", marginTop: "-5px" }}
+                    <input
+                      id="formassyid"
+                      className="in-fields"
+                      type="text"
+                      placeholder="Enter Assembly ID"
+                      required
+                    />
+                  </div>
+
+                  <div className="d-flex" style={{ gap: "15px" }}>
+                    <label className="form-label" style={{ marginTop: "-5px" }}>
+                      Description
+                      <span
+                        style={{
+                          color: "#f20707",
+                          fontSize: "16px",
+                          fontWeight: "bold",
+                        }}
                       >
-                        Assembly ID
-                        <span
-                          style={{
-                            color: "#f20707",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          *
-                        </span>
-                      </label>
+                        *
+                      </span>
+                    </label>
 
-                      <input
-                        id="formassyid"
-                        className="in-fields"
-                        type="text"
-                        placeholder="Enter Assembly ID"
-                        required
-                      />
-                    </div>
+                    <input
+                      id="formdescription"
+                      className="in-fields"
+                      as="textarea"
+                      type="text"
+                      placeholder="Enter Description"
+                    />
+                  </div>
 
-                    <div className="d-flex" style={{ gap: "15px" }}>
-                      <label className="form-label" style={{ marginTop: "-5px" }}>
-                        Description
-                        <span
-                          style={{
-                            color: "#f20707",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          *
-                        </span>
-                      </label>
-
-                      <input
-                        id="formdescription"
-                        className="in-fields"
-                        as="textarea"
-                        type="text"
-                        placeholder="Enter Description"
-                      />
-                    </div>
-
-                    <div className="d-flex" style={{ gap: "50px" }}>
-                      <label className="form-label" style={{ marginTop: "-5px" }}>
-                        Status
-                        {/* <span
+                  <div className="d-flex" style={{ gap: "50px" }}>
+                    <label className="form-label" style={{ marginTop: "-5px" }}>
+                      Status
+                      {/* <span
                         style={{
                           color: "#f20707",
                           fontSize: "16px",
@@ -1442,67 +1531,68 @@ function PartList() {
                       >
                         *
                       </span> */}
-                      </label>
+                    </label>
 
-                      <select
-                        className="ip-select dropdown-field"
-                        id="formstatus"
-                        aria-label="Select Status"
-                        // value={Statusss}
-                        defaultValue={Statusss}
-                        style={{ marginTop: "-1px" }}
-                      >
-                        <option value="Create" selected>Create</option>
-                        <option value="Edit" >Edit</option>
-                        <option value="Locked" >Locked</option>
-                        <option value="Closed" >Closed</option>
+                    <select
+                      className="ip-select dropdown-field"
+                      id="formstatus"
+                      aria-label="Select Status"
+                      // value={Statusss}
+                      defaultValue={Statusss}
+                      style={{ marginTop: "-1px" }}
+                    >
+                      <option value="Create" selected>
+                        Create
+                      </option>
+                      <option value="Edit">Edit</option>
+                      <option value="Locked">Locked</option>
+                      <option value="Closed">Closed</option>
 
-                        {/* {["Create", "Edit", "Locked", "Closed"].map((st) => {
+                      {/* {["Create", "Edit", "Locked", "Closed"].map((st) => {
                         return <option value={st}>{st}</option>;
                       })} */}
-                      </select>
-                    </div>
+                    </select>
+                  </div>
 
-                    <div className="d-flex" style={{ gap: "35px" }}>
-                      <label
-                        className="form-label"
-                        style={{ whiteSpace: "nowrap" }}
-                      >
-                        Mtrl Cost
-                      </label>
-                      <input
-                        id="formmtrlcost"
-                        className="in-fields"
-                        type="text"
-                        onKeyPress={handleKeyPress}
+                  <div className="d-flex" style={{ gap: "35px" }}>
+                    <label
+                      className="form-label"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      Mtrl Cost
+                    </label>
+                    <input
+                      id="formmtrlcost"
+                      className="in-fields"
+                      type="text"
+                      onKeyPress={handleKeyPress}
+                      onChange={handleChangeMtrlCost}
+                      // value={mtrlcost}
+                      defaultValue={parseFloat(mtrlcost)}
+                      placeholder="Enter Mtrl Cost"
+                    />
+                  </div>
+                  <div className="d-flex" style={{ gap: "40px" }}>
+                    <label
+                      className="form-label"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      JW Cost
+                    </label>
+                    <input
+                      id="formjwcost"
+                      className="in-fields"
+                      type="text"
+                      onKeyPress={handleKeyPress}
+                      // min="0"
+                      onChange={handleChangeLbrCost}
+                      defaultValue={parseFloat(lbrcost)}
+                      //  value={lbrcost}
+                      placeholder="Enter Labour Cost"
+                    />
+                  </div>
 
-                        onChange={handleChangeMtrlCost}
-                        // value={mtrlcost}
-                        defaultValue={parseFloat(mtrlcost)}
-                        placeholder="Enter Mtrl Cost"
-                      />
-                    </div>
-                    <div className="d-flex" style={{ gap: "40px" }}>
-                      <label
-                        className="form-label"
-                        style={{ whiteSpace: "nowrap" }}
-                      >
-                        JW Cost
-                      </label>
-                      <input
-                        id="formjwcost"
-                        className="in-fields"
-                        type="text"
-                        onKeyPress={handleKeyPress}
-                        // min="0"
-                        onChange={handleChangeLbrCost}
-                        defaultValue={parseFloat(lbrcost)}
-                        //  value={lbrcost}
-                        placeholder="Enter Labour Cost"
-                      />
-                    </div>
-
-                    {/* <div
+                  {/* <div
                     className="d-flex"
                     style={{ gap: "29px"}}>
                     <label
@@ -1561,19 +1651,18 @@ function PartList() {
                     )}
                   </div> */}
 
-
-                    <div>
-                      <div className="mb-1" style={{ marginLeft: "25px" }}>
-                        <div className="" style={{ textAlign: "center" }}>
-                          <button
-                            className="button-style"
-                            variant="primary"
-                            //  disabled={btnaddnew}
-                            type="submit"
-                          >
-                            Add New
-                          </button>
-                          {/* <button
+                  <div>
+                    <div className="mb-1" style={{ marginLeft: "25px" }}>
+                      <div className="" style={{ textAlign: "center" }}>
+                        <button
+                          className="button-style"
+                          variant="primary"
+                          //  disabled={btnaddnew}
+                          type="submit"
+                        >
+                          Add New
+                        </button>
+                        {/* <button
                           className="button-style"
                           variant="primary"
                           disabled={btnupdate}
@@ -1581,69 +1670,77 @@ function PartList() {
                         >
                           Update
                         </button> */}
-                          <button
-                            className="button-style mb-2"
-                            variant="primary"
-                            onClick={() => {
-                              saveBomAssemblyParts();
-                            }}
-                          >
-                            Save{" "}
-                          </button>
-                        </div>
+                        <button
+                          className="button-style mb-2"
+                          variant="primary"
+                          onClick={() => {
+                            saveBomAssemblyParts();
+                          }}
+                        >
+                          Save{" "}
+                        </button>
                       </div>
                     </div>
-                  </Form>
-                </div>
+                  </div>
+                </Form>
               </div>
-              <div style={{ textAlign: "center" }}>
-                <label className="Out-standing-inv ms-2 mb-1">
-                  Bill of Materials (BOM)
-                </label>
-              </div>
-              <div className="row">
-                <div
-                  className="col-md-8"
-                  style={{ maxHeight: "230px", overflowY: "scroll" }}
-                >
-                  <Table striped className="table-data border">
-                    <thead className="tableHeaderBGColor tablebody">
-                      <tr>
-                        <th onClick={() => requestSortCustpart("assyPartId")}>Assm PartId</th>
-                        <th onClick={() => requestSortCustpart("partid")}>Part ID</th>
-                        <th onClick={() => requestSortCustpart("partdesc")}>Description</th>
-                        <th onClick={() => requestSortCustpart("qty")}>Qty</th>
-                        {/* {["Assm PartId", "Part ID", "Description", "Qty"].map(
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <label className="Out-standing-inv ms-2 mb-1">
+                Bill of Materials (BOM)
+              </label>
+            </div>
+            <div className="row">
+              <div
+                className="col-md-8"
+                style={{ maxHeight: "230px", overflowY: "scroll" }}
+              >
+                <Table striped className="table-data border">
+                  <thead className="tableHeaderBGColor tablebody">
+                    <tr>
+                      <th onClick={() => requestSortCustpart("assyPartId")}>
+                        Assm PartId
+                      </th>
+                      <th onClick={() => requestSortCustpart("partid")}>
+                        Part ID
+                      </th>
+                      <th onClick={() => requestSortCustpart("partdesc")}>
+                        Description
+                      </th>
+                      <th onClick={() => requestSortCustpart("qty")}>Qty</th>
+                      {/* {["Assm PartId", "Part ID", "Description", "Qty"].map(
                         (item) => {
                           return <th>{item}</th>;
                         }
                       )} */}
-                      </tr>
-                    </thead>
-                    <tbody className="tablebody">
-                      {/* {custpartdetails != null
+                    </tr>
+                  </thead>
+                  <tbody className="tablebody">
+                    {/* {custpartdetails != null
                       ? custpartdetails.map((part, id) =>
                         rendercustpartdetail(part, id)
                       )
                       : null} */}
-                      {sortedDataCustPart().map((part, id) => rendercustpartdetail(part, id))}
-                    </tbody>
-                  </Table>
-                </div>
-                <div className="col-md-4" style={{ backgroundColor: "#e6e6e6" }}>
-                  <Form onSubmit={addCustPart} autoComplete="off">
-                    <h6 className="" style={{ textAlign: "center" }}>
-                      <u>Part Details</u>
-                    </h6>
-                    <div className="d-flex" style={{ gap: "35px" }}>
-                      <label
-                        className="form-label mt-2"
-                        style={{ whiteSpace: "nowrap" }}
-                      >
-                        Part ID{" "}
-                      </label>
+                    {sortedDataCustPart().map((part, id) =>
+                      rendercustpartdetail(part, id)
+                    )}
+                  </tbody>
+                </Table>
+              </div>
+              <div className="col-md-4" style={{ backgroundColor: "#e6e6e6" }}>
+                <Form onSubmit={addCustPart} autoComplete="off">
+                  <h6 className="" style={{ textAlign: "center" }}>
+                    <u>Part Details</u>
+                  </h6>
+                  <div className="d-flex" style={{ gap: "35px" }}>
+                    <label
+                      className="form-label mt-2"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      Part ID{" "}
+                    </label>
 
-                      {/* <select
+                    {/* <select
                       className="ip-select dropdown-field"
                       id="formcustpartid"
                       aria-label="Select Customer Part ID"
@@ -1665,57 +1762,55 @@ function PartList() {
                         : null}
                     </select> */}
 
-                      {custbomparts.length > 0 ? (
-                        <Typeahead
-                          className="ip-select dropdown-field"
-                          name="formcustpartid"
-                          id="formcustpartid"
-                          ref={typeaheadRef}
-                          labelKey={(option1) =>
-                            option1.PartId || "Choose a Part"
-                          }
-
-                          //  labelKey={(option1) => `${option1.PartId} || "C|| "Unknown Process""`}
-                          onChange={handlePartIdTypeaheadChange}
-                          //  selected={selectedPart} // Reflect the updated state
-                          options={custbomparts}
-                          placeholder="Choose a Part..."
-                        />
-                      ) : (
-                        ""
-                      )}
-
-                    </div>
-
-                    <div className="d-flex" style={{ gap: "24px" }}>
-                      <label className="form-label">Quantity</label>
-                      <input
-                        className="in-fields"
-                        id="formqty"
-                        type="number"
-                        onKeyDown={blockInvalidQtyChar}
-                        onChange={handleChangeQtyNumeric}
-                        // value={qty}
-                        placeholder="Enter Quantity"
-                      // min="0"
+                    {custbomparts.length > 0 ? (
+                      <Typeahead
+                        className="ip-select dropdown-field"
+                        name="formcustpartid"
+                        id="formcustpartid"
+                        ref={typeaheadRef}
+                        labelKey={(option1) =>
+                          option1.PartId || "Choose a Part"
+                        }
+                        //  labelKey={(option1) => `${option1.PartId} || "C|| "Unknown Process""`}
+                        onChange={handlePartIdTypeaheadChange}
+                        //  selected={selectedPart} // Reflect the updated state
+                        options={custbomparts}
+                        placeholder="Choose a Part..."
                       />
-                    </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
 
-                    <div className="row mt-3 mb-3 justify-content-center">
-                      <div style={{ textAlign: "center" }}>
-                        <button
-                          className="button-style"
-                          variant="primary"
-                          type="submit"
+                  <div className="d-flex" style={{ gap: "24px" }}>
+                    <label className="form-label">Quantity</label>
+                    <input
+                      className="in-fields"
+                      id="formqty"
+                      type="number"
+                      onKeyDown={blockInvalidQtyChar}
+                      onChange={handleChangeQtyNumeric}
+                      // value={qty}
+                      placeholder="Enter Quantity"
+                      // min="0"
+                    />
+                  </div>
+
+                  <div className="row mt-3 mb-3 justify-content-center">
+                    <div style={{ textAlign: "center" }}>
+                      <button
+                        className="button-style"
+                        variant="primary"
+                        type="submit"
                         //   disabled={btnasmprtnew}
                         //onClick={() => {
                         // saveBomAssemblyParts();
                         // addCustPart()
                         // }}
-                        >
-                          Add Assm Parts
-                        </button>
-                        {/* <button
+                      >
+                        Add Assm Parts
+                      </button>
+                      {/* <button
                         className="button-style"
                         variant="primary"
                      //   disabled={btnasmprtdel}
@@ -1723,35 +1818,43 @@ function PartList() {
                       >
                         Delete Assm Parts
                       </button> */}
-                      </div>
                     </div>
-                  </Form>
-                </div>
+                  </div>
+                </Form>
               </div>
-              {/* </Container> */}
-            </Tab>
-          </Tabs>
-        </Row >
-        <div className="row mt-3 mt-3" style={{ maxHeight: "600px" }}>
-          <Modal show={confirmModalOpen} onHide={closeModal} style={{ background: "#4d4d4d57" }}>
-            <Modal.Header closeButton>
-              <Modal.Title style={{ fontSize: "14px" }}>Confirmation Message</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <span style={{ fontSize: "12px" }}>Do you wish to add parts ? </span>
-            </Modal.Body>
-            <Modal.Footer className="d-flex flex-row justify-content-end">
-              <button className="button-style m-0 me-3" onClick={yesClicked}>
-                Yes
-              </button>
-              <button className="button-style m-0" onClick={closeModal}>
-                No
-              </button>
-            </Modal.Footer>
-          </Modal>
-        </div>
-        {/* // Customer BOM Items List */}
-        {/* <div className="row mt-3 mt-3" style={{ maxHeight: "600px" }}>
+            </div>
+            {/* </Container> */}
+          </Tab>
+        </Tabs>
+      </Row>
+      <div className="row mt-3 mt-3" style={{ maxHeight: "600px" }}>
+        <Modal
+          show={confirmModalOpen}
+          onHide={closeModal}
+          style={{ background: "#4d4d4d57" }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ fontSize: "14px" }}>
+              Confirmation Message
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <span style={{ fontSize: "12px" }}>
+              Do you wish to add parts ?{" "}
+            </span>
+          </Modal.Body>
+          <Modal.Footer className="d-flex flex-row justify-content-end">
+            <button className="button-style m-0 me-3" onClick={yesClicked}>
+              Yes
+            </button>
+            <button className="button-style m-0" onClick={closeModal}>
+              No
+            </button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+      {/* // Customer BOM Items List */}
+      {/* <div className="row mt-3 mt-3" style={{ maxHeight: "600px" }}>
         <Modal show={confirmModalOpen} onHide={closeModal} style={{ background: "#4d4d4d57" }}>
           <Modal.Header closeButton>
             <Modal.Title style={{ fontSize: "14px" }}>Confirmation Message</Modal.Title>
@@ -1769,10 +1872,10 @@ function PartList() {
           </Modal.Footer>
         </Modal>
       </div> */}
-      </div >
+    </div>
 
-      // </Container>
-    );
-  }
+    // </Container>
+  );
+}
 
-  export default PartList;
+export default PartList;

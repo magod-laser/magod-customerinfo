@@ -2005,10 +2005,11 @@ customerRouter.post(`/outstandinginvoices`, async (req, res, next) => {
     if (!custcode) return res.send(createError.BadRequest());
 
     misQueryMod(
-      `SELECT ddir.Inv_No,Date_Format(Inv_Date, '%d/%m/%Y') as Inv_Date, ddir.GrandTotal, ddir.PymtAmtRecd, (ddir.GrandTotal - ddir.PymtAmtRecd) as Due, 
+      `SELECT ddir.Inv_No,Date_Format(ddir.Inv_Date, '%d/%m/%Y') as Inv_Date, ddir.GrandTotal, ddir.PymtAmtRecd, (ddir.GrandTotal - ddir.PymtAmtRecd) as Due, 
         datediff(current_date(),ddir.Inv_Date) as DueDays, ddir.PO_No,c.credittime FROM magodmis.draft_dc_inv_register ddir
         inner join magodmis.cust_data c on c.Cust_code = ddir.Cust_Code
-        WHERE  ddir.DCStatus ='Despatched' AND ddir.Cust_Code='${custcode}' ORDER BY ddir.Inv_Date`,
+        WHERE  ddir.Cust_Code='${custcode}' ORDER BY ddir.Inv_Date`,
+        // ddir.DCStatus ='Despatched' AND 
       (err, data) => {
         if (err) logger.error(err);
         console.log(data);
