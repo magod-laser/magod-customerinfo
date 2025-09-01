@@ -24,7 +24,7 @@ function CreateCustomer() {
   const [modcustname, setModCustName] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   // const [respo, setRespo] = useState(false);
-  //const [fstbtnc, setFstbtnc] = useState(false); 
+  //const [fstbtnc, setFstbtnc] = useState(false);
   //const [secbtnc, setSecbtnc] = useState(false);
 
   useEffect(() => {
@@ -105,8 +105,6 @@ function CreateCustomer() {
   };
   // Suresh Code 12112024
 
-
-
   async function valCustName(e) {
     let cname = e.target.value.replace("^[A-Za-Z0-9 ");
     setNewCustName(cname);
@@ -130,39 +128,69 @@ function CreateCustomer() {
     localStorage.setItem("LazerCustomer", JSON.stringify(custsavedata));
   };
 
-  async function searchCustomer(e) {
+  // async function searchCustomer(e) {
 
-   // const spformat = /^[A-Za-z0-9\-\_\.\,\+\@#\$\&\*\| \{\}\(\)]+$/;
-   // const spformat = /^[A-Za-z0-9\-\_\.\,\+\@#\$\&\*\| \{\}\(\)\\\/ \[\] ]+$/;
-   const spformat = /^[A-Za-z0-9\-\_\.\,\@#\$\&\*\ ]+$/;
-    const trimmedName = e.target.value; // Trim whitespace from the input
-    if (!trimmedName || !trimmedName.match(spformat)) {
-      toast.error("Customer Name cannot have invalid characters");
-      setAlertModal(false);
+  //  // const spformat = /^[A-Za-z0-9\-\_\.\,\+\@#\$\&\*\| \{\}\(\)]+$/;
+  //  // const spformat = /^[A-Za-z0-9\-\_\.\,\+\@#\$\&\*\| \{\}\(\)\\\/ \[\] ]+$/;
+  //  const spformat = /^[A-Za-z0-9\-\_\.\,\@#\$\&\*\ ]+$/;
+  //   const trimmedName = e.target.value; // Trim whitespace from the input
+  //   if (!trimmedName || !trimmedName.match(spformat)) {
+  //     toast.error("Customer Name cannot have invalid characters");
+  //     setAlertModal(false);
+  //     return;
+  //   }
+
+  //   let sarray = [];
+
+  //   // {custdetdata
+  //   //     .filter(name => name.match(new RegExp(e.target.value.toLowerCase(), "i")))
+  //   //     .map(name => {
+  //   //         sarray.push(element);
+  //   //     //  return <li key={Cust_name}>{Cust_name} </li>
+  //   //     })}
+
+  //   custdetdata.forEach((element) => {
+  //     let sstring = element["Cust_name"].toLowerCase();
+  //     if (sstring.startsWith(e.target.value.toLowerCase())) {
+  //       // .includes(e.target.value.toLowerCase())) {
+  //       sarray.push(element);
+  //     }
+  //   });
+  //   console.log(sarray);
+  //   if (sarray.length > 0) {
+  //     setCustDetdatafiltered(sarray);
+  //   }
+  //   setNewCustName(e.target.value);
+  // }
+
+  async function searchCustomer(e) {
+    const value = e.target.value;
+
+    // Prevent leading space manually (already handled in keyDown too)
+    if (value.startsWith(" ")) {
+      toast.error("Customer Name cannot start with a space");
       return;
     }
 
-    let sarray = [];
+    // Update the input state immediately
+    setNewCustName(value);
 
-    // {custdetdata
-    //     .filter(name => name.match(new RegExp(e.target.value.toLowerCase(), "i")))
-    //     .map(name => {
-    //         sarray.push(element);
-    //     //  return <li key={Cust_name}>{Cust_name} </li>
-    //     })}
+    // Define allowed characters pattern
+    const spformat = /^[A-Za-z0-9\-\_\.\,\@#\$\&\*\ ]*$/;
 
-    custdetdata.forEach((element) => {
-      let sstring = element["Cust_name"].toLowerCase();
-      if (sstring.startsWith(e.target.value.toLowerCase())) {
-        // .includes(e.target.value.toLowerCase())) {
-        sarray.push(element);
-      }
-    });
-    console.log(sarray);
-    if (sarray.length > 0) {
-      setCustDetdatafiltered(sarray);
+    // Check for valid characters
+    if (!spformat.test(value)) {
+      toast.error("Customer Name cannot have invalid characters");
+      setCustDetdatafiltered([]); // Clear previous filtered data
+      return;
     }
-    setNewCustName(e.target.value);
+
+    // Search logic (case-insensitive, starts with input)
+    const filtered = custdetdata.filter((cust) =>
+      cust.Cust_name.toLowerCase().startsWith(value.toLowerCase())
+    );
+
+    setCustDetdatafiltered(filtered);
   }
 
   async function checkBranch(e) {
@@ -186,7 +214,6 @@ function CreateCustomer() {
     setAlertModal(false);
 
     //  toast.success(modcust["customerName"] + " added to Cutomer List with Code No : " + modcust["custcode"]);
-
   };
 
   async function submitSave(e) {
@@ -203,21 +230,29 @@ function CreateCustomer() {
     // }
 
     e.preventDefault();
-    let newCustName = e.target.elements.newCustName.value.trimEnd();
+    //let newCustName = e.target.elements.newCustName.value.trimEnd();
     let branchName = e.target.elements.branchName.value.trimEnd();
 
-    // const spformat = /^[A-Za-z0-9\-\_\.\,\+\@#\$\&\*\/\\\|]+$/;
-    const spformat = /^[A-Za-z0-9\-\_\.\,\@#\$\&\*\ ]+$/;
-
-    const trimmedName = newCustName.trim(); // Trim whitespace from the input 
-    
-     if (!trimmedName || !trimmedName.match(spformat)) {
-    // if (!trimmedName || !spformat.test(trimmedName)) {
-      toast.error("Customer Name cannot be blank or contain semicolons"); 
-      setAlertModal(false); 
+    const trimmedName = newCustName.trim();
+    if (trimmedName === "") {
+      toast.error("Customer Name cannot be empty or just spaces or contain semicolons");
       return;
     }
-    const customerExists = custdetdatafiltered.some((cust) => cust.Cust_name === newCustName);
+
+    // const spformat = /^[A-Za-z0-9\-\_\.\,\+\@#\$\&\*\/\\\|]+$/;
+   // const spformat = /^[A-Za-z0-9\-\_\.\,\@#\$\&\*\ ]+$/;
+
+   // const trimmedName = newCustName.trim(); // Trim whitespace from the input
+
+    // if (!trimmedName || !trimmedName.match(spformat)) {
+    //   // if (!trimmedName || !spformat.test(trimmedName)) {
+    //   toast.error("Customer Name cannot be blank or contain semicolons");
+    //   setAlertModal(false);
+    //   return;
+    // }
+    const customerExists = custdetdatafiltered.some(
+      (cust) => cust.Cust_name === newCustName
+    );
     if (customerExists) {
       toast.error("Customer Already Existed");
       setAlertModal(false);
@@ -225,7 +260,6 @@ function CreateCustomer() {
     }
     setModCustName(newCustName);
     setAlertModal(true);
-
   }
 
   const saveCustomerData = async () => {
@@ -244,15 +278,18 @@ function CreateCustomer() {
         localStorage.setItem("LazerCustomer", JSON.stringify(modcust));
         localStorage.removeItem("LazerCustExist");
 
-        alert(newCustName + " added to Customer List with Code No : " + resp.custcode);
+        alert(
+          newCustName +
+            " added to Customer List with Code No : " +
+            resp.custcode
+        );
         setAlertModal(false);
         window.location.href = "/Customer/Customers/CustomerInfo";
         // setModCustName(newCustName);
         // setAlertModal(true);
-
-      });
+      }
+    );
   };
-
 
   // setAlertModal(true);
 
@@ -288,14 +325,13 @@ function CreateCustomer() {
     }
   };
 
-
   return (
     <div>
       <h4 className="title">Customer Creator Form</h4>
       <div className="form-style">
         <Form onSubmit={submitSave} autoComplete="off">
           <div className="row">
-            <div className="col-md-4 d-flex" style={{ gap: '10px' }}>
+            <div className="col-md-4 d-flex" style={{ gap: "10px" }}>
               <label className="form-label">Name </label>
               <input
                 className="in-field"
@@ -308,7 +344,7 @@ function CreateCustomer() {
                 onChange={(e) => searchCustomer(e)}
               />
             </div>
-            <div className="col-md-4 d-flex" style={{ gap: '10px' }}>
+            <div className="col-md-4 d-flex" style={{ gap: "10px" }}>
               <label className="form-label">Branch </label>
               <input
                 className="in-field"
@@ -342,8 +378,12 @@ function CreateCustomer() {
               >
                 <thead className="tableHeaderBGColor tablebody">
                   <tr>
-                    <th onClick={() => requestSort("Cust_Code")}>Customer Code</th>
-                    <th onClick={() => requestSort("Cust_name")}>Customer Name</th>
+                    <th onClick={() => requestSort("Cust_Code")}>
+                      Customer Code
+                    </th>
+                    <th onClick={() => requestSort("Cust_name")}>
+                      Customer Name
+                    </th>
                     <th onClick={() => requestSort("Branch")}>Branch</th>
                     {/* {["Customer Code", "Customer Name", "Branch"].map((h) => {
                       return <th>{h}</th>;
@@ -356,9 +396,8 @@ function CreateCustomer() {
                     //   ?  custdetdatafiltered.map((cust, id) =>
                     //     rendertable(cust, id)
 
-                    sortedData()?.map((cust, id) =>
-                      rendertable(cust, id)
-                    )}
+                    sortedData()?.map((cust, id) => rendertable(cust, id))
+                  }
                   {/* : ""} */}
                 </tbody>
               </Table>
